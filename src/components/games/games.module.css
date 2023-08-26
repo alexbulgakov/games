@@ -3,3 +3,9 @@
     width: 100%;
     margin: 0 auto;
 }
+
+.paginationContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}

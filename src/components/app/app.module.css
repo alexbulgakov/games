@@ -2,6 +2,7 @@
     background-color: #22075e;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .content {

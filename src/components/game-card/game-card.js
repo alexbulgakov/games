@@ -1,32 +1,36 @@
-import { Card, Button } from 'antd';
-import { CalendarOutlined, UserOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import cardStyles from './game-card.module.css';
-
-const { Meta } = Card;
+import { formatDate } from '../../utils/utils';
 
 function GameCard({ game }) {
-    const { title, releaseDate, publisher, genre, imageUrl } = game;
+    const { title, release_date, publisher, genre, thumbnail } = game;
 
     return (
         <div className={cardStyles.gameCardContainer}>
-            <img className={cardStyles.gameCardImage} src={imageUrl} alt={title} />
-            <div className={cardStyles.gameCardTitle}>{title}</div>
-            <div className={cardStyles.gameCardInfo}>
-                <div className={cardStyles.gameCardInfoMeta}>
-                    <CalendarOutlined />
-                    <span>{`Release Date: ${releaseDate}`}</span>
+            <div className={cardStyles.gameCardTop}>
+                <img className={cardStyles.gameCardImage} src={thumbnail} alt={title} />
+                <div className={cardStyles.gameCardInfo}>
+                    <table className={cardStyles.gameCardInfoTable}>
+                        <tbody>
+                            <tr>
+                                <td>Release Date</td>
+                                <td>{formatDate(release_date)}</td>
+                            </tr>
+                            <tr>
+                                <td>Publisher</td>
+                                <td>{publisher}</td>
+                            </tr>
+                            <tr>
+                                <td>Genre</td>
+                                <td>{genre}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div className={cardStyles.gameCardInfoMeta}>
-                    <UserOutlined />
-                    <span>{`Publisher: ${publisher}`}</span>
-                </div>
-                <div className={cardStyles.gameCardInfoMeta}>
-                    <AppstoreOutlined />
-                    <span>{`Genre: ${genre}`}</span>
-                </div>
-                <Button type="primary" className={cardStyles.gameCardButton}>
-                    Learn More
-                </Button>
+            </div>
+            <div className={cardStyles.gameCardBottom}>
+                <div className={cardStyles.gameCardTitle}>{title}</div>
+                <Button type="primary" className={cardStyles.gameCardButton}>Learn More</Button>
             </div>
         </div>
     );

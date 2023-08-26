@@ -1,36 +1,58 @@
-import { Col, Row } from 'antd';
+import { useState } from 'react';
+import { Col, Row, Pagination } from 'antd';
 import GameCard from '../game-card/game-card';
+import GameCardSkeleton from '../game-card-skeleton/game-card-skeleton';
 import gamesStyles from './games.module.css';
 
-function Games() {
+function Games({ data, loading }) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [gamesPerPage, setGamesPerPage] = useState(9);
 
-    const game = {
-        title: 'Cyberpunk 2077',
-        releaseDate: 'December 10, 2020',
-        publisher: 'CD Projekt',
-        genre: 'Action RPG',
-        imageUrl: 'https://images.unsplash.com/photo-1634658340808-9abaef7eb9a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80',
+    const indexOfLastGame = currentPage * gamesPerPage;
+    const indexOfFirstGame = indexOfLastGame - gamesPerPage;
+    const currentGames = data.slice(indexOfFirstGame, indexOfLastGame);
+
+    const paginate = (page) => {
+        setCurrentPage(page);
+    };
+
+    const onShowSizeChange = (current, size) => {
+        setGamesPerPage(size);
+        setCurrentPage(1);
     };
 
     return (
         <div className={gamesStyles.gamesContainer}>
-            <Row gutter={[{
-                xs: 8,
-                sm: 16,
-                md: 24,
-                lg: 32,
-            }, {
-                xs: 4,
-                sm: 8,
-                md: 16,
-                lg: 24,
-            }]}
-                justify="start">
-                <Col xs={24} sm={12} md={8} lg={6}>
-                    <GameCard game={game}/>
-                </Col>
-
+            <Row gutter={[24, 16]} justify='start'>
+                {loading ? (
+                    Array.from({ length: 9 }, (_, index) => (
+                        <Col key={index} xs={24} sm={12} md={8} lg={8}>
+                            <GameCardSkeleton />
+                        </Col>
+                    ))
+                ) : (
+                    currentGames.map((game) => (
+                        <Col key={game.id} xs={24} sm={12} md={8} lg={8}>
+                            <GameCard game={game} />
+                        </Col>
+                    ))
+                )}
             </Row>
+            
+            {!loading && (
+                <div className={gamesStyles.paginationContainer}>
+                    <Pagination
+                        current={currentPage}
+                        total={data.length}
+                        pageSize={gamesPerPage}
+                        onChange={paginate}
+                        showSizeChanger={true}
+                        pageSizeOptions={['9', '18', '27']}
+                        onShowSizeChange={onShowSizeChange}
+                    />
+                </div>
+            )}
+
         </div>
     );
 }
