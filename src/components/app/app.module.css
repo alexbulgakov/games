@@ -1,6 +1,18 @@
-.app {
-    background: #282c34;
-    text-rendering: optimizeLegibility;
-    min-width: 320px;
-    min-height: 100vh;
+.header {
+    background-color: #22075e;
+    display: flex;
+    align-items: center;
+}
+
+.content {
+    padding: 20px;
+}
+
+.footer {
+    text-align: center;
+}
+
+.banner {
+    padding: 40px 0;
+    text-align: center;
 }
