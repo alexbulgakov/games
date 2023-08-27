@@ -9,3 +9,7 @@
     justify-content: flex-end;
     margin-top: 20px;
 }
+
+.alert {
+    max-width: 300px;
+}

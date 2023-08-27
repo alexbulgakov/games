@@ -7,6 +7,8 @@
 
 .content {
     padding: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .footer {
@@ -16,4 +18,11 @@
 .banner {
     padding: 40px 0;
     text-align: center;
+}
+
+.sider {
+    text-align: center;
+    line-height: 120px;
+    color: #fff;
+    background-color: #3ba0e9;
 }

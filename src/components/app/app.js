@@ -8,21 +8,21 @@ import api from '../../utils/api';
 const { Title, Paragraph, Text } = Typography;
 
 
-const { Header, Footer, Content } = Layout;
+const { Header, Footer, Content, Sider } = Layout;
 
 function App() {
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [statusOfLoading, setStatusOfLoading] = useState('loading');
 
     useEffect(() => {
         api.getItems()
             .then(res => {
                 setData(res);
-                setLoading(false);
+                setStatusOfLoading('loaded');
+                console.log(res);
             })
             .catch((error) => {
-                console.log(error);
-                setLoading(false);
+                setStatusOfLoading('error');
             });
     }, []);
 
@@ -41,9 +41,13 @@ function App() {
                     <Title level={2} >Hover over the card for detailed information</Title>
                     <Paragraph style={{ fontSize: '18px' }}>To go to the game's page, click on the 'Learn More' button</Paragraph>
                 </Typography>
-                <Content className={appStyles.content}>
-                    <Games data={data} loading={loading} />
-                </Content>
+
+                {/* <Layout hasSider> */}
+                    {/* <Sider className={appStyles.sider} >Sider</Sider> */}
+                    <Content className={appStyles.content}>
+                        <Games data={data} statusOfLoading={statusOfLoading} />
+                    </Content>
+                {/* </Layout> */}
                 <Footer className={appStyles.footer}>
                     <Text>
                         © 2023 by alexbulgakov.
