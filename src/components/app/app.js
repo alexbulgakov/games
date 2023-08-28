@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import appStyles from './app.module.css';
 import { Layout, Space, Typography } from 'antd';
 import { PlayCircleOutlined } from '@ant-design/icons';
 import Games from '../games/games';
 import api from '../../utils/api';
+import GamePage from '../game-page/game-page';
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 
 
 const { Header, Footer, Content, Sider } = Layout;
@@ -19,7 +21,7 @@ function App() {
             .then(res => {
                 setData(res);
                 setStatusOfLoading('loaded');
-                console.log(res);
+                // console.log(res);
             })
             .catch((error) => {
                 setStatusOfLoading('error');
@@ -27,34 +29,36 @@ function App() {
     }, []);
 
     return (
-        <Space
-            direction='vertical'
-            style={{
-                width: '100%',
-            }}
-        >
-            <Layout>
-                <Header className={appStyles.header}>
-                    <Title level={2} style={{ color: 'white', margin: 0 }}><PlayCircleOutlined /> FREETOGAME</Title>
-                </Header>
-                <Typography className={appStyles.banner}>
-                    <Title level={2} >Hover over the card for detailed information</Title>
-                    <Paragraph style={{ fontSize: '18px' }}>To go to the game's page, click on the 'Learn More' button</Paragraph>
-                </Typography>
+        <BrowserRouter>
+            <Space
+                direction='vertical'
+                style={{
+                    width: '100%',
+                }}
+            >
+                <Layout className={appStyles.appContainer}>
+                    <Header className={appStyles.header}>
+                        <Title level={2} style={{ color: 'white', margin: 0 }}><PlayCircleOutlined /> FREETOGAME</Title>
+                    </Header>
 
-                {/* <Layout hasSider> */}
+
+                    {/* <Layout hasSider> */}
                     {/* <Sider className={appStyles.sider} >Sider</Sider> */}
                     <Content className={appStyles.content}>
-                        <Games data={data} statusOfLoading={statusOfLoading} />
+                        <Routes>
+                            <Route path="/" element={<Games data={data} statusOfLoading={statusOfLoading} />} />
+                            <Route path="/game/:gameId" element={<GamePage />} />
+                        </Routes>
                     </Content>
-                {/* </Layout> */}
-                <Footer className={appStyles.footer}>
-                    <Text>
-                        © 2023 by alexbulgakov.
-                    </Text>
-                </Footer>
-            </Layout>
-        </Space>
+                    {/* </Layout> */}
+                    <Footer className={appStyles.footer}>
+                        <Text>
+                            © 2023 by alexbulgakov.
+                        </Text>
+                    </Footer>
+                </Layout>
+            </Space>
+        </BrowserRouter>
     )
 }
 

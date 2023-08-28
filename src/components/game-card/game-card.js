@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import cardStyles from './game-card.module.css';
 import { formatDate } from '../../utils/utils';
 
 function GameCard({ game }) {
-    const { title, release_date, publisher, genre, thumbnail } = game;
+    const { title, release_date, publisher, genre, thumbnail, id } = game;
 
     return (
         <div className={cardStyles.gameCardContainer}>
@@ -30,7 +31,9 @@ function GameCard({ game }) {
             </div>
             <div className={cardStyles.gameCardBottom}>
                 <div className={cardStyles.gameCardTitle}>{title}</div>
-                <Button type="primary" className={cardStyles.gameCardButton}>Learn More</Button>
+                <Link to={`/game/${id}`}>
+                    <Button type="primary" className={cardStyles.gameCardButton}>Learn More</Button>
+                </Link>
             </div>
         </div>
     );

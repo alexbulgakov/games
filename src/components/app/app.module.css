@@ -13,11 +13,7 @@
 
 .footer {
     text-align: center;
-}
-
-.banner {
-    padding: 40px 0;
-    text-align: center;
+    margin-top: auto;
 }
 
 .sider {
@@ -25,4 +21,10 @@
     line-height: 120px;
     color: #fff;
     background-color: #3ba0e9;
+}
+
+.appContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }

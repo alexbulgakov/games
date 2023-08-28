@@ -19,7 +19,12 @@ class Api {
     }
 
     getItems() {
-        return fetch(this._baseUrl, options)
+        return fetch(`${this._baseUrl}/games`, options)
+            .then(res => this._getRes(res));
+    }
+
+    getItem(id) {
+        return fetch(`${this._baseUrl}/game?id=${id}`, options)
             .then(res => this._getRes(res));
     }
 }

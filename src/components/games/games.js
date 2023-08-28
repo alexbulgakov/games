@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Col, Row, Pagination, Alert, Radio, Checkbox, Button, Select, Empty } from 'antd';
+import { Col, Row, Pagination, Alert, Radio, Checkbox, Button, Select, Empty, Typography } from 'antd';
 import GameCard from '../game-card/game-card';
 import GameCardSkeleton from '../game-card-skeleton/game-card-skeleton';
 import gamesStyles from './games.module.css';
+
+const { Title, Paragraph } = Typography;
 
 function Games({ data, statusOfLoading }) {
     const [currentPage, setCurrentPage] = useState(1);
@@ -84,7 +86,7 @@ function Games({ data, statusOfLoading }) {
             );
         }
 
-        if (statusOfLoading === 'loaded') {
+        if (statusOfLoading === 'loaded' && currentGames) {
             if (currentGames.length === 0) {
                 return (
                     <Empty description={<span>There are no games matching the selected filters</span>} />
@@ -96,7 +98,7 @@ function Games({ data, statusOfLoading }) {
                     <div className={gamesStyles.gamesContainer}>
                         <Row gutter={[24, 16]} justify='start'>
                             {currentGames.map((game) => {
-                                console.log(game.genre);
+                                // console.log(game.genre);
                                 return (
                                     <Col key={game.id} xs={24} sm={12} md={8} lg={8}>
                                         <GameCard game={game} />
@@ -104,18 +106,19 @@ function Games({ data, statusOfLoading }) {
                                 )
                             })}
                         </Row>
+                        <div className={gamesStyles.paginationContainer}>
+                            <Pagination
+                                current={currentPage}
+                                total={totalGames}
+                                pageSize={gamesPerPage}
+                                onChange={paginate}
+                                showSizeChanger={true}
+                                pageSizeOptions={['9', '18', '27']}
+                                onShowSizeChange={onShowSizeChange}
+                            />
+                        </div>
                     </div>
-                    <div className={gamesStyles.paginationContainer}>
-                        <Pagination
-                            current={currentPage}
-                            total={totalGames}
-                            pageSize={gamesPerPage}
-                            onChange={paginate}
-                            showSizeChanger={true}
-                            pageSizeOptions={['9', '18', '27']}
-                            onShowSizeChange={onShowSizeChange}
-                        />
-                    </div>
+
                 </>
             );
         }
@@ -123,6 +126,11 @@ function Games({ data, statusOfLoading }) {
 
     return (
         <div>
+            <Typography className={gamesStyles.banner}>
+                <Title level={2} >Hover over the card for detailed information</Title>
+                <Paragraph style={{ fontSize: '18px' }}>To go to the game's page, click on the 'Learn More' button</Paragraph>
+            </Typography>
+
             <Radio.Group onChange={e => {
                 setCurrentPage(1);
                 setPlatformFilter(e.target.value);

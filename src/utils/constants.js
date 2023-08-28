@@ -1,1 +1,1 @@
-export const baseUrl = 'https://free-to-play-games-database.p.rapidapi.com/api/games';
+export const baseUrl = 'https://free-to-play-games-database.p.rapidapi.com/api';

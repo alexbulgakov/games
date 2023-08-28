@@ -1,0 +1,23 @@
+.alert {
+    max-width: 300px;
+    align-self: center;
+}
+
+.sceleton {
+    max-width: 500px;
+    align-self: center;
+}
+
+.carousel {
+    margin-top: 20px;
+    width: 1000px;
+}
+
+.tableText {
+    font-weight: bold;
+}
+
+.screenshot {
+    width: 100%;
+    height: 100%;
+}

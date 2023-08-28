@@ -13,3 +13,8 @@
 .alert {
     max-width: 300px;
 }
+
+.banner {
+    padding: 40px 0;
+    text-align: center;
+}
