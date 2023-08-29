@@ -1,0 +1,28 @@
+.container {
+    max-width: 1000px;
+}
+
+.sort {
+    display: flex;
+    justify-content: space-between;
+}
+
+.reset {
+    width: 100%;
+}
+
+.radio {
+    display: flex;
+    align-items: center;
+
+}
+
+@media (max-width: 768px) {
+    .sort {
+        justify-content: flex-start;
+    }
+
+    .sort :first-child {
+        margin-right: 5px;
+    }
+  }

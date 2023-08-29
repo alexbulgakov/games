@@ -1,0 +1,24 @@
+.container {
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .button {
+        display: none;
+    }
+}
+
+
+@media (max-width: 318px) {
+    .title {
+        font-size: 20px;
+    }
+}
+
+.title {
+    color: #fff;
+}

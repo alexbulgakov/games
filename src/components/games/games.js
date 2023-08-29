@@ -1,27 +1,29 @@
-import { useState, useEffect } from 'react';
-import { Col, Row, Pagination, Alert, Radio, Checkbox, Button, Select, Empty, Typography } from 'antd';
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Col, Row, Pagination, Alert, Empty, Tour } from 'antd';
 import GameCard from '../game-card/game-card';
 import GameCardSkeleton from '../game-card-skeleton/game-card-skeleton';
 import gamesStyles from './games.module.css';
+import {
+    setCurrentPage,
+    setUniqueGenres,
+    toggleFirstTour,
+    toggleSecondTour
+} from '../../services/actions/gameActions';
 
-const { Title, Paragraph } = Typography;
-
-function Games({ data, statusOfLoading }) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [gamesPerPage, setGamesPerPage] = useState(9);
-    const [platformFilter, setPlatformFilter] = useState('');
+function Games() {
     const [currentGames, setCurrentGames] = useState(null);
     const [totalGames, setTotalGames] = useState(0);
-    const [selectedGenres, setSelectedGenres] = useState([]);
-    const [uniqueGenres, setUniqueGenres] = useState([]);
-    const [sortType, setSortType] = useState('none');
-    const [sortOrder, setSortOrder] = useState('asc');
+
+    const dispatch = useDispatch();
+    const { data, status, currentPage, platformFilter, selectedGenres, sortType, sortOrder, isFirstTourOpen } = useSelector((state) => state.games);
+
+    const gamesPerPage = 9;
 
     useEffect(() => {
         const finalGenresArray = [...new Set(data.map(game => game.genre.trim()))];
 
-
-        setUniqueGenres(finalGenresArray);
+        dispatch(setUniqueGenres(finalGenresArray));
 
         let filteredGames = [...data];
 
@@ -48,31 +50,34 @@ function Games({ data, statusOfLoading }) {
         const currentGames = filteredGames.slice(indexOfFirstGame, indexOfLastGame);
 
         setCurrentGames(currentGames);
-    }, [data, platformFilter, selectedGenres, currentPage, gamesPerPage, sortType, sortOrder]);
+    }, [data, platformFilter, selectedGenres, currentPage, sortType, sortOrder, dispatch]);
 
     function paginate(page) {
-        setCurrentPage(page);
+        dispatch(setCurrentPage(page));
     };
 
-    function onShowSizeChange(current, size) {
-        setGamesPerPage(size);
-        setCurrentPage(1);
-    };
+    const refCard = useRef(null);
+    const refSelect = useRef(null);
 
-    function resetFilters() {
-        setPlatformFilter('');
-        setSelectedGenres([]);
-        setCurrentPage(1);
-        setSortType('none');
-        setSortOrder('asc');
-    };
+    const steps = [
+        {
+            title: 'Game card',
+            description: 'Hover over the card for detailed information',
+            target: () => refCard.current,
+        },
+        {
+            title: 'Select page',
+            description: 'Click on the page number to navigate through the pages',
+            target: () => refSelect.current,
+        },
+    ]
 
     function renderContent() {
-        if (statusOfLoading === 'error') {
+        if (status === 'error') {
             return <Alert className={gamesStyles.alert} message='An Error Occurred' description='Unable to load games. Please try again later.' type='error' showIcon />;
         }
 
-        if (statusOfLoading === 'loading') {
+        if (status === 'loading') {
             return (
                 <div className={gamesStyles.gamesContainer}>
                     <Row gutter={[24, 16]} justify='start'>
@@ -86,81 +91,47 @@ function Games({ data, statusOfLoading }) {
             );
         }
 
-        if (statusOfLoading === 'loaded' && currentGames) {
+        if (status === 'loaded' && currentGames) {
             if (currentGames.length === 0) {
                 return (
-                    <Empty description={<span>There are no games matching the selected filters</span>} />
+                    <Empty className={gamesStyles.empty} description={<span>There are no games matching the selected filters</span>} />
                 );
             }
 
             return (
                 <>
-                    <div className={gamesStyles.gamesContainer}>
-                        <Row gutter={[24, 16]} justify='start'>
-                            {currentGames.map((game) => {
-                                // console.log(game.genre);
-                                return (
-                                    <Col key={game.id} xs={24} sm={12} md={8} lg={8}>
+                    <Row gutter={[24, 16]} justify='start'>
+                        {currentGames.map((game, index) => {
+                            return (
+                                <Col key={game.id} xs={24} sm={12} md={8} lg={8}>
+                                    <div ref={index === 0 ? refCard : null}>
                                         <GameCard game={game} />
-                                    </Col>
-                                )
-                            })}
-                        </Row>
-                        <div className={gamesStyles.paginationContainer}>
-                            <Pagination
-                                current={currentPage}
-                                total={totalGames}
-                                pageSize={gamesPerPage}
-                                onChange={paginate}
-                                showSizeChanger={true}
-                                pageSizeOptions={['9', '18', '27']}
-                                onShowSizeChange={onShowSizeChange}
-                            />
-                        </div>
+                                    </div>
+                                </Col>
+                            )
+                        })}
+                    </Row>
+                    <div className={gamesStyles.paginationContainer} ref={refSelect}>
+                        <Pagination
+                            current={currentPage}
+                            total={totalGames}
+                            pageSize={gamesPerPage}
+                            onChange={paginate}
+                            showSizeChanger={false}
+                        />
                     </div>
-
                 </>
             );
         }
     };
 
     return (
-        <div>
-            <Typography className={gamesStyles.banner}>
-                <Title level={2} >Hover over the card for detailed information</Title>
-                <Paragraph style={{ fontSize: '18px' }}>To go to the game's page, click on the 'Learn More' button</Paragraph>
-            </Typography>
-
-            <Radio.Group onChange={e => {
-                setCurrentPage(1);
-                setPlatformFilter(e.target.value);
-            }}
-                value={platformFilter}>
-                <Radio value='Web Browser'>Browser</Radio>
-                <Radio value='PC (Windows)'>PC</Radio>
-                <Radio value={''}>All</Radio>
-            </Radio.Group>
-
-            <Checkbox.Group
-                options={uniqueGenres}
-                value={selectedGenres}
-                onChange={checkedGenres => setSelectedGenres(checkedGenres)}
-            />
-
-            <Select value={sortType} onChange={value => setSortType(value)}>
-                <Select.Option value='none'>No sorting</Select.Option>
-                <Select.Option value='byDate'>By date</Select.Option>
-                <Select.Option value='byName'>By name</Select.Option>
-            </Select>
-
-            <Select value={sortOrder} onChange={value => setSortOrder(value)}>
-                <Select.Option value='asc'>Ascending</Select.Option>
-                <Select.Option value='desc'>Descending</Select.Option>
-            </Select>
-
-
-            <Button onClick={resetFilters}>Reset filters</Button>
+        <div >
             {renderContent()}
+            <Tour className={gamesStyles.tour} open={isFirstTourOpen} onClose={() => {
+                dispatch(toggleSecondTour());
+                dispatch(toggleFirstTour());
+            }} steps={steps} />
         </div>
     );
 }

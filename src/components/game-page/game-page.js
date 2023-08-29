@@ -1,13 +1,17 @@
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import api from '../../utils/api';
+import { useParams, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Alert, Skeleton, Typography, Table, Carousel, Image, Row, Col, Empty } from 'antd';
-import gameStyles from './game-page.module.css';
-import { Link } from 'react-router-dom';
+import api from '../../utils/api';
 import { Button } from 'antd';
+import gameStyles from './game-page.module.css';
+import {
+    setTourButtonStatus,
+} from '../../services/actions/gameActions';
 
 function GamePage() {
     const { gameId } = useParams();
+    const dispatch = useDispatch();
 
     const { Title, Text } = Typography;
 
@@ -64,7 +68,6 @@ function GamePage() {
                 { key: 'Developer', value: developer },
             ];
 
-
             let systemRequirementsTable;
 
             const columns = [
@@ -104,16 +107,12 @@ function GamePage() {
 
             let screenshotsSlider;
 
-
-
             if (screenshots.length !== 0) {
                 const carouselStyle = {
                     borderRadius: '10px',
                     overflow: 'hidden',
                     height: '400px'
                 }
-
-                console.log(screenshots);
 
                 screenshotsSlider = (
                     <div className={gameStyles.carousel}>
@@ -128,43 +127,41 @@ function GamePage() {
                 );
             } else {
                 screenshotsSlider = (
-                    <Empty description={<span>Screenshots not provided</span>} />
+                    <Empty className={gameStyles.empty} description={<span>Screenshots not provided</span>} />
                 );
             }
 
             return (
-                <div>
-                    <Row align='middle'>
-                        <Col span={8}>
+                <div className={gameStyles.container}>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={24} md={8} lg={8} xl={6}>
                             <Image width={200} src={`${thumbnail}`} />
                         </Col>
-                        <Col span={12}>
+                        <Col xs={24} sm={24} md={10} lg={10} xl={12}>
                             <Title level={1} >{title}</Title>
                             <Title level={3} >{genre}</Title>
                         </Col>
-                        <Col span={4}>
+                        <Col xs={24} sm={24} md={6} lg={6} xl={6} className={gameStyles.button}>
                             <Link to={`/`}>
-                                <Button>Back to main page</Button>
+                                <Button onClick={() => dispatch(setTourButtonStatus())}>Back to main page</Button>
                             </Link>
                         </Col>
 
                     </Row>
 
-                    <Row gutter={16}>
-                        <Col span={8}>
+                    <Row gutter={[16, 16]} className={gameStyles.tables}>
+                        <Col xs={24} sm={24} md={10} lg={10} xl={10}>
                             <Table dataSource={generalInfo} columns={columns} pagination={false} />
                         </Col>
-                        <Col span={16}>
+                        <Col xs={24} sm={24} md={14} lg={14} xl={14}>
                             {systemRequirementsTable}
                         </Col>
                     </Row>
-
                     {screenshotsSlider}
                 </div>
             );
         }
     };
-
 
     return (
         <>
