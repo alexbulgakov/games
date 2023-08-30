@@ -1,13 +1,4 @@
-import { baseUrl } from "./constants";
-
-const options = {
-    method: 'GET',
-    headers: {
-        'X-RapidAPI-Key': 'a104a1395fmsh9398c54207b25bap1e8a0ajsnd3804fc253a8',
-        'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
-    }
-};
-
+import { baseUrl, options, retries, delay } from "./constants";
 class Api {
     constructor(baseUrl) {
         this._baseUrl = baseUrl;
@@ -18,14 +9,27 @@ class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
+    _fetchWithRetry(url, options, retries, delay) {
+        return fetch(url, options)
+            .then(res => this._getRes(res))
+            .catch((error) => {
+                if (retries <= 0) {
+                    return Promise.reject('Maximum retries reached, could not fetch data');
+                }
+                return new Promise((res) => setTimeout(res, delay))
+                    .then(() => {
+                        retries--;
+                        return this._fetchWithRetry(url, options, retries, delay);
+                    });
+            });
+    }
+
     getItems() {
-        return fetch(`${this._baseUrl}/games`, options)
-            .then(res => this._getRes(res));
+        return this._fetchWithRetry(`${this._baseUrl}/games`, options, retries, delay);
     }
 
     getItem(id) {
-        return fetch(`${this._baseUrl}/game?id=${id}`, options)
-            .then(res => this._getRes(res));
+        return this._fetchWithRetry(`${this._baseUrl}/game?id=${id}`, options, retries, delay);
     }
 }
 
