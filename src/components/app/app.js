@@ -21,15 +21,20 @@ function App() {
     const { data, status, platformFilter, sortType } = useSelector((state) => state.games);
 
     useEffect(() => {
+        const abortController = new AbortController();
+
         dispatch(fetchGamesRequest());
 
-        api.getItems(platformFilter, sortType)
+        api.getItems(platformFilter, sortType, abortController.signal)
             .then(res => {
                 dispatch(fetchGamesSuccess(res));
             })
             .catch((error) => {
+                if (error === 'Fetch aborted') return;
                 dispatch(fetchGamesFailure(error));
             });
+
+        return () => abortController.abort();
     }, [dispatch, platformFilter, sortType]);
 
     return (

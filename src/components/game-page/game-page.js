@@ -19,6 +19,7 @@ function GamePage() {
     const [statusOfLoading, setStatusOfLoading] = useState('loading');
 
     useEffect(() => {
+        const abortController = new AbortController();
         const cachedData = localStorage.getItem(gameId);
         const now = new Date().getTime();
 
@@ -32,15 +33,18 @@ function GamePage() {
             }
         }
 
-        api.getItem(gameId)
+        api.getItem(gameId, abortController.signal)
             .then(res => {
                 setData(res);
                 setStatusOfLoading('loaded');
                 localStorage.setItem(gameId, JSON.stringify({ data: res, timestamp: now }));
             })
             .catch((error) => {
+                if (error === 'Fetch aborted') return;
                 setStatusOfLoading('error');
             });
+
+        return () => abortController.abort();
     }, [gameId]);
 
     function renderContent() {

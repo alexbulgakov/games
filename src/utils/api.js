@@ -10,27 +10,32 @@ class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
-    _fetchWithRetry(url, options, retries, delay) {
-        return fetch(url, options)
+    _fetchWithRetry(url, options, retries, delay, signal) {
+        const fetchOptions = { ...options, signal };
+
+        return fetch(url, fetchOptions)
             .then(res => this._getRes(res))
             .catch((error) => {
+                if (error.name === 'AbortError') {
+                    return Promise.reject('Fetch aborted');
+                }
                 if (retries <= 0) {
                     return Promise.reject('Maximum retries reached, could not fetch data');
                 }
                 return new Promise((res) => setTimeout(res, delay))
                     .then(() => {
                         retries--;
-                        return this._fetchWithRetry(url, options, retries, delay);
+                        return this._fetchWithRetry(url, options, retries, delay, signal);
                     });
             });
     }
 
-    getItems(platform, sort) {
-        return this._fetchWithRetry(`${this._baseUrl}/games?platform=${platform}&sort-by=${sort}`, options, retries, delay);
+    getItems(platform, sort, signal) {
+        return this._fetchWithRetry(`${this._baseUrl}/games?platform=${platform}&sort-by=${sort}`, options, retries, delay, signal);
     }
 
-    getItem(id) {
-        return this._fetchWithRetry(`${this._baseUrl}/game?id=${id}`, options, retries, delay);
+    getItem(id, signal) {
+        return this._fetchWithRetry(`${this._baseUrl}/game?id=${id}`, options, retries, delay, signal);
     }
 }
 
