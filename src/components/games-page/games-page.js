@@ -9,7 +9,7 @@ function GamesPage() {
 
     return (
         <Space className={gamesPageStyles.container} direction="vertical" size="middle">
-            {status === 'loaded' ? <FiltersAndSorting /> : ''}
+            {status === 'error' ? '' : <FiltersAndSorting />}
             <Games />
 
         </Space>

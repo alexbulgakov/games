@@ -7,22 +7,24 @@
     justify-content: space-between;
 }
 
-.reset {
+.sort :first-child {
+    margin-right: 5px;
+}
+
+.sortType {
     width: 100%;
 }
 
-.radio {
-    display: flex;
-    align-items: center;
+.platform {
+    width: 100%;
+}
 
+.reset {
+    width: 100%;
 }
 
 @media (max-width: 768px) {
     .sort {
         justify-content: flex-start;
     }
-
-    .sort :first-child {
-        margin-right: 5px;
-    }
-  }
+}

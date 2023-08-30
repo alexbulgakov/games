@@ -4,7 +4,7 @@ const initialState = {
     data: [],
     status: 'idle',
     currentPage: 1,
-    platformFilter: '',
+    platformFilter: 'all',
     selectedGenres: [],
     sortType: 'none',
     sortOrder: 'asc',

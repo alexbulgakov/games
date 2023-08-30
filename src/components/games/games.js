@@ -16,31 +16,22 @@ function Games() {
     const [totalGames, setTotalGames] = useState(0);
 
     const dispatch = useDispatch();
-    const { data, status, currentPage, platformFilter, selectedGenres, sortType, sortOrder, isFirstTourOpen } = useSelector((state) => state.games);
+    const { data, status, currentPage, selectedGenres, sortOrder, isFirstTourOpen } = useSelector((state) => state.games);
 
     const gamesPerPage = 9;
 
     useEffect(() => {
         const finalGenresArray = [...new Set(data.map(game => game.genre.trim()))];
-
-        dispatch(setUniqueGenres(finalGenresArray));
-
         let filteredGames = [...data];
 
-        if (platformFilter) {
-            filteredGames = filteredGames.filter(game => game.platform === platformFilter);
-        }
+        dispatch(setUniqueGenres(finalGenresArray));
 
         if (selectedGenres.length > 0) {
             filteredGames = filteredGames.filter(game => selectedGenres.includes(game.genre));
         }
 
-        const multiplier = sortOrder === 'asc' ? 1 : -1;
-
-        if (sortType === 'byDate') {
-            filteredGames.sort((a, b) => multiplier * (new Date(b.release_date) - new Date(a.release_date)));
-        } else if (sortType === 'byName') {
-            filteredGames.sort((a, b) => multiplier * a.title.localeCompare(b.title));
+        if (sortOrder === 'desc') {
+            filteredGames = filteredGames.reverse();
         }
 
         setTotalGames(filteredGames.length);
@@ -50,7 +41,7 @@ function Games() {
         const currentGames = filteredGames.slice(indexOfFirstGame, indexOfLastGame);
 
         setCurrentGames(currentGames);
-    }, [data, platformFilter, selectedGenres, currentPage, sortType, sortOrder, dispatch]);
+    }, [data, selectedGenres, currentPage, sortOrder, dispatch]);
 
     function paginate(page) {
         dispatch(setCurrentPage(page));

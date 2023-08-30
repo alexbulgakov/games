@@ -1,4 +1,5 @@
 import { baseUrl, options, retries, delay } from "./constants";
+
 class Api {
     constructor(baseUrl) {
         this._baseUrl = baseUrl;
@@ -24,8 +25,8 @@ class Api {
             });
     }
 
-    getItems() {
-        return this._fetchWithRetry(`${this._baseUrl}/games`, options, retries, delay);
+    getItems(platform, sort) {
+        return this._fetchWithRetry(`${this._baseUrl}/games?platform=${platform}&sort-by=${sort}`, options, retries, delay);
     }
 
     getItem(id) {

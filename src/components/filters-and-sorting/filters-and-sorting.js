@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Radio, Button, Select, Tour, Row, Col } from 'antd';
+import { Button, Select, Tour, Row, Col } from 'antd';
 import filtersStyles from './filters-and-sorting.module.css';
 import {
     setCurrentPage,
@@ -13,15 +13,7 @@ import {
 
 function FiltersAndSorting() {
     const dispatch = useDispatch();
-    const { platformFilter, selectedGenres, sortType, sortOrder, uniqueGenres, isSecondTourOpen } = useSelector((state) => state.games);
-
-    function resetFilters() {
-        dispatch(setPlatformFilter(''));
-        dispatch(setSelectedGenres([]));
-        dispatch(setCurrentPage(1));
-        dispatch(setSortType('none'));
-        dispatch(setSortOrder('asc'));
-    };
+    const { platformFilter, selectedGenres, sortType, sortOrder, uniqueGenres, isSecondTourOpen, status } = useSelector((state) => state.games);
 
     const refPlatform = useRef(null);
     const refGenre = useRef(null);
@@ -56,20 +48,33 @@ function FiltersAndSorting() {
         value: genre,
     }));
 
+    const isLoading = status === 'loading';
+
+    function resetFilters() {
+        dispatch(setPlatformFilter('all'));
+        dispatch(setSelectedGenres([]));
+        dispatch(setCurrentPage(1));
+        dispatch(setSortType('none'));
+        dispatch(setSortOrder('asc'));
+    };
+
     return (
         <div className={filtersStyles.container}>
-            <Row gutter={[16, 16]}>
-                <Col xs={24} sm={12} md={8} lg={6} xl={6} className={filtersStyles.radio}>
-                    <Radio.Group ref={refPlatform}
-                        onChange={e => {
-                            dispatch(setCurrentPage(1));
-                            dispatch(setPlatformFilter(e.target.value));
-                        }}
-                        value={platformFilter}>
-                        <Radio value='Web Browser'>Browser</Radio>
-                        <Radio value='PC (Windows)'>PC</Radio>
-                        <Radio value={''}>All</Radio>
-                    </Radio.Group>
+            <Row gutter={[8, 8]} className={filtersStyles.row}>
+                <Col xs={24} sm={12} md={8} lg={6} xl={4} >
+                    <div ref={refPlatform}>
+                        <Select value={platformFilter} className={filtersStyles.platform}
+                            onChange={value => {
+                                dispatch(setCurrentPage(1));
+                                dispatch(setPlatformFilter(value));
+                            }}
+                            disabled={isLoading ? true : false}
+                        >
+                            <Select.Option value='all'>All</Select.Option>
+                            <Select.Option value='browser'>Browser</Select.Option>
+                            <Select.Option value='pc'>PC</Select.Option>
+                        </Select>
+                    </div>
                 </Col>
                 <Col className={filtersStyles.genre} xs={24} sm={12} md={8} lg={6} xl={8}>
                     <div ref={refGenre}>
@@ -79,6 +84,7 @@ function FiltersAndSorting() {
                             style={{
                                 width: '100%',
                             }}
+                            disabled={isLoading ? true : false}
                             placeholder="Select genres"
                             value={selectedGenres}
                             onChange={checkedGenres => {
@@ -90,22 +96,31 @@ function FiltersAndSorting() {
                         />
                     </div>
                 </Col>
-                <Col xs={24} sm={12} md={8} lg={6} xl={6}>
+                <Col xs={24} sm={12} md={8} lg={6} xl={8} >
                     <div className={filtersStyles.sort} ref={refSort}>
-                        <Select value={sortType} onChange={value => dispatch(setSortType(value))} >
+                        <Select disabled={isLoading ? true : false}
+                            value={sortType}
+                            className={filtersStyles.sortType}
+                            onChange={value => dispatch(setSortType(value))}
+                        >
                             <Select.Option value='none'>No sorting</Select.Option>
-                            <Select.Option value='byDate'>By date</Select.Option>
-                            <Select.Option value='byName'>By name</Select.Option>
+                            <Select.Option value='release-date'>By date</Select.Option>
+                            <Select.Option value='alphabetical'>By name</Select.Option>
+                            <Select.Option value='popularity'>By popularity</Select.Option>
+                            <Select.Option value='relevance'>By relevance</Select.Option>
                         </Select>
 
-                        <Select disabled={sortType === 'none' ? true : false} value={sortOrder} onChange={value => dispatch(setSortOrder(value))} >
+                        <Select disabled={sortType === 'none' || isLoading ? true : false}
+                            value={sortOrder}
+                            onChange={value => dispatch(setSortOrder(value))}
+                        >
                             <Select.Option value='asc'>Ascending</Select.Option>
                             <Select.Option value='desc'>Descending</Select.Option>
                         </Select>
                     </div>
                 </Col>
                 <Col xs={24} sm={12} md={8} lg={6} xl={4} >
-                    <Button danger onClick={resetFilters} ref={refReset} className={filtersStyles.reset}>Reset filters</Button>
+                    <Button danger onClick={resetFilters} ref={refReset} className={filtersStyles.reset} disabled={isLoading ? true : false}>Reset filters</Button>
                 </Col>
             </Row>
             <Tour open={isSecondTourOpen} onClose={() => dispatch(toggleSecondTour())} steps={steps} />

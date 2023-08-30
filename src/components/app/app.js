@@ -18,19 +18,19 @@ const { Link, Text } = Typography;
 
 function App() {
     const dispatch = useDispatch();
-    const { data, status } = useSelector((state) => state.games);
+    const { data, status, platformFilter, sortType } = useSelector((state) => state.games);
 
     useEffect(() => {
         dispatch(fetchGamesRequest());
 
-        api.getItems()
+        api.getItems(platformFilter, sortType)
             .then(res => {
                 dispatch(fetchGamesSuccess(res));
             })
             .catch((error) => {
                 dispatch(fetchGamesFailure(error));
             });
-    }, [dispatch]);
+    }, [dispatch, platformFilter, sortType]);
 
     return (
         <BrowserRouter>
