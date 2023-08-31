@@ -15,7 +15,7 @@ type TInitialState = {
     isSecondTourOpen: boolean,
 }
 
-const initialState: TInitialState = {
+export const initialState: TInitialState = {
     data: [],
     status: 'loading',
     currentPage: 1,
@@ -28,7 +28,7 @@ const initialState: TInitialState = {
     isSecondTourOpen: false,
 };
 
-const gameReducer = (state = initialState, action: TUnionAction): TInitialState => {
+export const gameReducer = (state = initialState, action: TUnionAction): TInitialState => {
     switch (action.type) {
         case actionTypes.FETCH_GAMES_REQUEST:
             return { ...state, status: 'loading' };
@@ -59,5 +59,3 @@ const gameReducer = (state = initialState, action: TUnionAction): TInitialState 
             return state;
     }
 };
-
-export default gameReducer;

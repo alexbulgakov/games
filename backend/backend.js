@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -13,6 +14,13 @@ const options = {
         'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
     }
 };
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
 
 app.use(express.static('build'));
 
