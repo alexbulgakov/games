@@ -8,7 +8,7 @@ import {
     setCurrentPage,
     setUniqueGenres,
     toggleFirstTour,
-    toggleSecondTour
+    toggleSecondTour,
 } from '../../services/actions/gameActions';
 import { TGame } from '../../utils/types';
 import { RootState } from '../../services/store/store'

@@ -10,7 +10,7 @@ const baseUrl = 'https://free-to-play-games-database.p.rapidapi.com/api';
 const options = {
     method: 'GET',
     headers: {
-        'X-RapidAPI-Key': '88df9d9bbdmsh86242f238a476adp197abfjsn410848bc2344',
+        'X-RapidAPI-Key': 'ENTER_YOUR_KEY_HERE', // ВСТАВЬТЕ ВАШ КЛЮЧ RAPID API
         'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
     }
 };
