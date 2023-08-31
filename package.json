@@ -28,11 +28,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node ./backend/backend.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "server": "node ./backend/backend.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
