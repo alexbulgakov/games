@@ -1,15 +1,15 @@
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { formatDate } from '../../utils/utils';
 import cardStyles from './game-card.module.css';
-import {
-    setTourButtonStatus,
-} from '../../services/actions/gameActions';
+import { TGame } from '../../utils/types';
 
-function GameCard({ game }) {
+interface IGameCardProps {
+    game: TGame;
+}
+
+const GameCard: React.FC<IGameCardProps> = ({ game }) => {
     const { title, release_date, publisher, genre, thumbnail, id } = game;
-    const dispatch = useDispatch();
 
     return (
         <div className={cardStyles.gameCardContainer}>
@@ -37,7 +37,7 @@ function GameCard({ game }) {
             <div className={cardStyles.gameCardBottom}>
                 <div className={cardStyles.gameCardTitle}>{title}</div>
                 <Link to={`/game/${id}`}>
-                    <Button type="primary" className={cardStyles.gameCardButton} onClick={() => dispatch(setTourButtonStatus())}>Learn More</Button>
+                    <Button type="primary" className={cardStyles.gameCardButton} >Learn More</Button>
                 </Link>
             </div>
 

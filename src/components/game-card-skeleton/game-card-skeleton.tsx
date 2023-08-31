@@ -1,6 +1,6 @@
 import { Card, Skeleton } from 'antd';
 
-const GameCardSkeleton = () => {
+const GameCardSkeleton: React.FC = () => {
     return (
         <Card style={{ width: '100%' }}>
             <Skeleton.Image active />

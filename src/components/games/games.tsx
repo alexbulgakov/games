@@ -10,13 +10,15 @@ import {
     toggleFirstTour,
     toggleSecondTour
 } from '../../services/actions/gameActions';
+import { TGame } from '../../utils/types';
+import { RootState } from '../../services/store/store'
 
-function Games() {
-    const [currentGames, setCurrentGames] = useState(null);
-    const [totalGames, setTotalGames] = useState(0);
+const Games: React.FC = () => {
+    const [currentGames, setCurrentGames] = useState<Array<TGame> | null>(null);
+    const [totalGames, setTotalGames] = useState<number>(0);
 
     const dispatch = useDispatch();
-    const { data, status, currentPage, selectedGenres, sortOrder, isFirstTourOpen } = useSelector((state) => state.games);
+    const { data, status, currentPage, selectedGenres, sortOrder, isFirstTourOpen } = useSelector((state: RootState) => state.games);
 
     const gamesPerPage = 9;
 
@@ -43,7 +45,7 @@ function Games() {
         setCurrentGames(currentGames);
     }, [data, selectedGenres, currentPage, sortOrder, dispatch]);
 
-    function paginate(page) {
+    function paginate(page: number): void {
         dispatch(setCurrentPage(page));
     };
 

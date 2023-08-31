@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Layout, Space, Typography } from 'antd';
+import { RootState } from '../../services/store/store'
 import appStyles from './app.module.css';
 import api from '../../utils/api';
 import GamePage from '../game-page/game-page';
@@ -16,9 +17,9 @@ import {
 const { Header, Footer, Content } = Layout;
 const { Link, Text } = Typography;
 
-function App() {
+const App: React.FC = () => {
     const dispatch = useDispatch();
-    const { data, status, platformFilter, sortType } = useSelector((state) => state.games);
+    const { platformFilter, sortType } = useSelector((state: RootState) => state.games);
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -48,7 +49,7 @@ function App() {
                     <Layout>
                         <Content className={appStyles.content}>
                             <Routes>
-                                <Route path='/' element={<GamesPage data={data} statusOfLoading={status} />} />
+                                <Route path='/' element={<GamesPage />} />
                                 <Route path='/game/:gameId' element={<GamePage />} />
                             </Routes>
                         </Content>

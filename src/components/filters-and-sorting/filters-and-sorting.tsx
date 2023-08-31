@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Select, Tour, Row, Col } from 'antd';
+import { RootState } from '../../services/store/store';
 import filtersStyles from './filters-and-sorting.module.css';
 import {
     setCurrentPage,
@@ -11,9 +12,14 @@ import {
     toggleSecondTour
 } from '../../services/actions/gameActions';
 
-function FiltersAndSorting() {
+interface IOptionType {
+    label: string;
+    value: string;
+}
+
+const FiltersAndSorting: React.FC = () => {
     const dispatch = useDispatch();
-    const { platformFilter, selectedGenres, sortType, sortOrder, uniqueGenres, isSecondTourOpen, status } = useSelector((state) => state.games);
+    const { platformFilter, selectedGenres, sortType, sortOrder, uniqueGenres, isSecondTourOpen, status } = useSelector((state: RootState) => state.games);
 
     const refPlatform = useRef(null);
     const refGenre = useRef(null);
@@ -43,14 +49,14 @@ function FiltersAndSorting() {
         },
     ]
 
-    const options = uniqueGenres.map(genre => ({
+    const options: IOptionType[] = uniqueGenres.map(genre => ({
         label: genre,
         value: genre,
     }));
 
     const isLoading = status === 'loading';
 
-    function resetFilters() {
+    const resetFilters = (): void => {
         dispatch(setPlatformFilter('all'));
         dispatch(setSelectedGenres([]));
         dispatch(setCurrentPage(1));

@@ -1,8 +1,23 @@
 import * as actionTypes from '../action-types/action-types';
+import { TGame } from '../../utils/types';
+import { TUnionAction } from '../actions/gameActions';
 
-const initialState = {
+type TInitialState = {
+    data: [] | Array<TGame>,
+    status: 'loading' | 'loaded' | 'error',
+    currentPage: number,
+    platformFilter: 'all' | 'browser' | 'pc',
+    selectedGenres: string[],
+    sortType: 'none' | 'release-date' | 'alphabetical' | 'popularity' | 'relevance',
+    sortOrder: 'asc' | 'desc',
+    uniqueGenres: string[],
+    isFirstTourOpen: boolean,
+    isSecondTourOpen: boolean,
+}
+
+const initialState: TInitialState = {
     data: [],
-    status: 'idle',
+    status: 'loading',
     currentPage: 1,
     platformFilter: 'all',
     selectedGenres: [],
@@ -11,10 +26,9 @@ const initialState = {
     uniqueGenres: [],
     isFirstTourOpen: false,
     isSecondTourOpen: false,
-    isTourButtonActive: true
 };
 
-const gameReducer = (state = initialState, action) => {
+const gameReducer = (state = initialState, action: TUnionAction): TInitialState => {
     switch (action.type) {
         case actionTypes.FETCH_GAMES_REQUEST:
             return { ...state, status: 'loading' };
@@ -41,8 +55,6 @@ const gameReducer = (state = initialState, action) => {
             return { ...state, isFirstTourOpen: !state.isFirstTourOpen };
         case actionTypes.TOGGLE_SECOND_TOUR:
             return { ...state, isSecondTourOpen: !state.isSecondTourOpen };
-        case actionTypes.SET_TOUR_BUTTON_STATUS:
-            return { ...state, isTourButtonActive: !state.isTourButtonActive };
         default:
             return state;
     }

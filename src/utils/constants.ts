@@ -1,6 +1,6 @@
-export const baseUrl = 'https://free-to-play-games-database.p.rapidapi.com/api';
+export const baseUrl: string = 'https://free-to-play-games-database.p.rapidapi.com/api';
 
-export const options = {
+export const options: RequestInit = {
     method: 'GET',
     headers: {
         'X-RapidAPI-Key': '88df9d9bbdmsh86242f238a476adp197abfjsn410848bc2344',
@@ -8,6 +8,6 @@ export const options = {
     }
 };
 
-export let retries = 3;
+export let retries: number = 3;
 
-export const delay = 1000;
+export const delay: number = 1000;

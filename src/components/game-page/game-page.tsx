@@ -1,25 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Alert, Skeleton, Typography, Table, Carousel, Image, Row, Col, Empty } from 'antd';
 import api from '../../utils/api';
 import { Button } from 'antd';
 import gameStyles from './game-page.module.css';
-import {
-    setTourButtonStatus,
-} from '../../services/actions/gameActions';
 
-function GamePage() {
-    const { gameId } = useParams();
-    const dispatch = useDispatch();
+import { TGameFull, TStatusOfLoading } from '../../utils/types';
+
+const GamePage: React.FC = () => {
+    const { gameId } = useParams<{ gameId: string }>();
 
     const { Title, Text } = Typography;
 
-    const [data, setData] = useState({});
-    const [statusOfLoading, setStatusOfLoading] = useState('loading');
+    const [data, setData] = useState<TGameFull | null>(null);
+    const [statusOfLoading, setStatusOfLoading] = useState<TStatusOfLoading>('loading');
 
     useEffect(() => {
         const abortController = new AbortController();
+
+        if (!gameId) {
+            setStatusOfLoading('error');
+            return;
+        }
+
         const cachedData = localStorage.getItem(gameId);
         const now = new Date().getTime();
 
@@ -49,7 +52,14 @@ function GamePage() {
 
     function renderContent() {
         if (statusOfLoading === 'error') {
-            return <Alert className={gameStyles.alert} message='An Error Occurred' description='Unable to load information. Please try again later.' type='error' showIcon />;
+            return (
+                <>
+                    <Alert className={gameStyles.alert} message='An Error Occurred' description='Unable to load information. Please try again later.' type='error' showIcon />;
+                    <Link to={`/`}>
+                        <Button>Back to main page</Button>
+                    </Link >
+                </>
+            )
         }
 
         if (statusOfLoading === 'loading') {
@@ -79,13 +89,13 @@ function GamePage() {
                     title: '',
                     dataIndex: 'key',
                     key: 'key',
-                    render: text => <Text className={gameStyles.tableText}>{text}</Text>
+                    render: (text: string) => <Text className={gameStyles.tableText}>{text}</Text>
                 },
                 {
                     title: '',
                     dataIndex: 'value',
                     key: 'value',
-                    render: text => <Text>{text}</Text>
+                    render: (text: string) => <Text>{text}</Text>
                 }
             ];
 
@@ -111,7 +121,7 @@ function GamePage() {
 
             let screenshotsSlider;
 
-            if (screenshots.length !== 0) {
+            if (screenshots) {
                 const carouselStyle = {
                     borderRadius: '10px',
                     overflow: 'hidden',
@@ -147,7 +157,7 @@ function GamePage() {
                         </Col>
                         <Col xs={24} sm={24} md={6} lg={6} xl={6} className={gameStyles.button}>
                             <Link to={`/`}>
-                                <Button onClick={() => dispatch(setTourButtonStatus())}>Back to main page</Button>
+                                <Button>Back to main page</Button>
                             </Link>
                         </Col>
 
