@@ -48,9 +48,9 @@ npm run start-react
 
 На **главной странице** отображаются игры в виде карточек. При наведении курсора на карточку игры отображается подробная информация о ней.  Игры можно **фильтровать**: по платформе и жанру. **Сортировка** осуществляется по возрастанию/убыванию даты релиза, по  популярности, по алфавиту и т.д. Кнопка Reset - сброс фильтров. На странице также отображаются индикаторы загрузки и оповещения об ошибках. По нажатию на кнопку Begin tour начнется гайд по фунционалу странички.
 
-![gif-1](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWExenUwcG00djVzaWo2bTl0dzMyZGlmbmx1cnloNTZ0czFpamxlYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yjINznh9WPT6y2dEar/giphy.gif)
+[![Animation-1.gif](https://i.postimg.cc/SRsrSLMc/Animation-1.gif)](https://postimg.cc/8J2Ww6wC)
 
 По клику на карточку произойдет переход на **страницу игры** с информацией об игре, каруселью скриншотов и кнопка возврата на главную страницу. 
 
-![gif-1](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHo2NGxiM3NucGQyenV2MmZpMW8zMWZ0cTZtaXg2enBkeWxzOTd6bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/nOdEURNyhNJDXCptFk/giphy.gif)
+[![Animation-2.gif](https://i.postimg.cc/sgppRHNt/Animation-2.gif)](https://postimg.cc/LJ8qtDRT)
 
