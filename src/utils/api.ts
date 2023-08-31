@@ -1,6 +1,6 @@
-import { baseUrl, options, retries, delay } from "./constants";
+import { baseUrl, retries, delay } from "./constants";
 
-interface IFetchOptions extends RequestInit {
+interface IFetchOptions {
     signal?: AbortSignal | null;
 }
 
@@ -16,8 +16,8 @@ class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
-    private _fetchWithRetry(url: string, options: IFetchOptions, retries: number, delay: number, signal?: AbortSignal): Promise<any> {
-        const fetchOptions: IFetchOptions = { ...options, signal };
+    private _fetchWithRetry(url: string, retries: number, delay: number, signal?: AbortSignal): Promise<any> {
+        const fetchOptions: IFetchOptions = { signal };
 
         return fetch(url, fetchOptions)
             .then(res => this._getRes(res))
@@ -31,17 +31,17 @@ class Api {
                 return new Promise((res) => setTimeout(res, delay))
                     .then(() => {
                         retries--;
-                        return this._fetchWithRetry(url, options, retries, delay, signal);
+                        return this._fetchWithRetry(url, retries, delay, signal);
                     });
             });
     }
 
     public getItems(platform: string, sort: string, signal?: AbortSignal): Promise<any> {
-        return this._fetchWithRetry(`${this._baseUrl}/games?platform=${platform}&sort-by=${sort}`, options, retries, delay, signal);
+        return this._fetchWithRetry(`${this._baseUrl}/getItems?platform=${platform}&sort=${sort}`, retries, delay, signal);
     }
 
     public getItem(id: string, signal?: AbortSignal): Promise<any> {
-        return this._fetchWithRetry(`${this._baseUrl}/game?id=${id}`, options, retries, delay, signal);
+        return this._fetchWithRetry(`${this._baseUrl}/getItem?id=${id}`, retries, delay, signal);
     }
 }
 
