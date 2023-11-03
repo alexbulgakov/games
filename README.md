@@ -1,56 +1,24 @@
 # Free To Play Games 
 
-### <a href="https://ftp-games-e11547fb4d03.herokuapp.com/" target="_blank">Посмотреть онлайн</a>
+### <a href="">Watch online</a>
 
-### Локальный просмотр и запуск
-Введите следующие команды в консоли:
-```
-git clone https://github.com/alexbulgakov
-```
-```
-npm install
-```
-**(ATTENTION!)** Для локального запуска потребуется ключ к API, предоставляемый RapidAPI. Перейдите на <a href="https://rapidapi.com/digiwalls/api/free-to-play-games-database" target="_blank">страницу сервиса</a> и зарегестрируйтесь. В разделе Code Snippets будет доступен X-RapidAPI-Key. Откройте корневую папку проекта, затем папку backend. В файле backend.js вставьте ваш ключ в строке с пометкой "ВСТАВЬТЕ ВАШ КЛЮЧ RAPID API".
+### Technical Parameters
 
-Далее возможно два варианта:
-- Вариант 1. Запуск сервера с хостингом статики и API для инкапсуляции внешних запросов. Доступен весь функционал приложения. 
-```
-npm run build
-```
-```
-npm run start
-```
-Сервер запустится на порту 3001. <a href="http://localhost:3001/" target="_blank">Нажмите для просмотра в браузере.</a>
+- Stack: React+Redux, TypeScript, Node.JS, Jest, <a href="https://www.freetogame.com/api-doc">Free-To-Play Games API</a>, <a href="https://ant.design/docs/react/introduce">Ant Design</a>.
+- Reducers are covered by unit tests.
+- The application is responsive.
+- It is considered that the game list might contain thousands of titles.
+- In case of a failed request, three retry attempts are made.
+- When navigating from page to page, requests related to the old page are terminated.
+- The backend for hosting static content and an API to encapsulate external requests is written in Node.JS.
 
-- Вариант 2. Запуск бэкенда и фронтенда на разных портах. В таком случае сервер будет обеспечивать только функционал API - запросов.
+### Brief Description
 
-Запуск бэкенда:
-```
-npm run start
-```
-Запуск фронтенда (в отдельном окне консоли):
-```
-npm run start-react
-```
-<a href="http://localhost:3000/" target="_blank">Нажмите для просмотра в браузере.</a>
-
-### Технические параметры
-
-- Стек: React+Redux, TypeScript, Node.JS, Jest, <a href="https://www.freetogame.com/api-doc" target="_blank">Free-To-Play Games API</a>, <a href="https://ant.design/docs/react/introduce" target="_blank">Ant Design</a>. 
-- Редьюсеры покрыты unit-тестами.
-- Приложение адаптивно. 
-- Учитывается, что список игр может содержать тысячи тайтлов.
-- При неудачном запросе происходит три попытки повторного запроса.
-- При переходе со страницы на страницу, запросы, относящиеся к старой странице, прерываются.
-- Бэкенд для хостинга статики и API для инкапсуляции внешних запросов написан на Node.JS.
-
-### Краткое описание
-
-На **главной странице** отображаются игры в виде карточек. При наведении курсора на карточку игры отображается подробная информация о ней.  Игры можно **фильтровать**: по платформе и жанру. **Сортировка** осуществляется по возрастанию/убыванию даты релиза, по  популярности, по алфавиту и т.д. Кнопка Reset - сброс фильтров. На странице также отображаются индикаторы загрузки и оповещения об ошибках. По нажатию на кнопку Begin tour начнется гайд по фунционалу странички.
+On the **main page**, games are displayed as cards. Hovering over a game card reveals detailed information about it. **Games can be filtered** by platform and genre. Sorting is done by ascending/descending release date, by popularity, alphabetically, etc. The Reset button clears all filters. The page also displays loading indicators and error notifications. Clicking on the 'Begin tour' button will start a guide on the page's functionality.
 
 [![Animation-1.gif](https://i.postimg.cc/SRsrSLMc/Animation-1.gif)](https://postimg.cc/8J2Ww6wC)
 
-По клику на карточку произойдет переход на **страницу игры** с информацией об игре, каруселью скриншотов и кнопка возврата на главную страницу. 
+By clicking on a card, the user is directed to the **game page** with information about the game, a carousel of screenshots, and a button to return to the main page.
 
 [![Animation-2.gif](https://i.postimg.cc/sgppRHNt/Animation-2.gif)](https://postimg.cc/LJ8qtDRT)
 
